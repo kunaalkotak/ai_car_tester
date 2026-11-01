@@ -1,7 +1,0 @@
-# V4 fine-tuning and dataset-preparation additions
-# Install into the same Python 3.11 ARM64 environment used by Listing Lens.
-ImageHash>=4.3.1
-Pillow>=10.0
-scikit-learn>=1.4
-matplotlib>=3.8
-# TensorFlow is provided by the main project requirements.txt (2.21.0).

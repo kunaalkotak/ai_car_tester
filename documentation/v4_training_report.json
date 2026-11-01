@@ -1,6 +1,6 @@
 {
   "model": "Listing Lens V4 candidate, fine-tuned from EfficientNetB0 V3",
-  "v3_source_model": "models_v3/car_cnn_model_v3.keras",
+  "v3_source_model": "Historical V3 starting checkpoint (not included in this repository)",
   "v3_source_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
   "v3_source_hash_unchanged_check": true,
   "v4_candidate_model": "models_v4/car_cnn_model_v4.keras",
@@ -221,15 +221,15 @@
     "V3 and V4 test operating-point metrics use thresholds independently selected on the same V4 validation split; ROC-AUC is threshold-independent. The original V3 0.47 operating-point metrics are retained for reference.",
     "The new-generator AI-only subset in this V4 test split contains 9 images total (GPT 4, Gemini 3, Meta AI 2); it is too small for strong per-generator claims.",
     "The user-provided GPT/GEMINI/META folder labels are recorded source labels and were not independently authenticated.",
-    "V3 and V4 were compared on the same V4 validation and test splits. V4 is the active application model in this package; the V3 checkpoint is preserved unchanged as a rollback backup.",
+    "The V3 checkpoint was used to initialise V4 fine-tuning but is not included in this final application repository.",
     "All three named generator families were represented in the V4 training/development pool. This evaluation does not establish generalisation to completely unseen generator families."
   ],
   "deployment": {
     "application_display_name": "CNN",
     "active_model_path": "models_v4/car_cnn_model_v4.keras",
     "active_threshold": 0.5,
-    "v3_preserved_as_backup": true,
-    "v3_backup_path": "models_v3/car_cnn_model_v3.keras",
-    "promotion_note": "V4 is the active application candidate following review of the completed full-dataset training report. V3 weights remain unchanged as a rollback backup."
+    "v3_source_checkpoint_included_in_repository": false,
+    "v3_source_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+    "promotion_note": "V4 is the only model shipped for application inference. The V3 checkpoint was the fine-tuning starting point and is not distributed in this repository; V3 comparison metrics and source hash remain documented."
   }
 }

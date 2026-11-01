@@ -1,0 +1,44 @@
+{
+  "dataset_plan": "V4 new-AI-candidate allocation; original Dataset V2 data remains the base and must be supplied locally",
+  "candidate_images": 54,
+  "counts_by_generator_and_split": {
+    "GEMINI": {
+      "train": 13,
+      "validation": 3,
+      "test": 3
+    },
+    "GPT": {
+      "validation": 4,
+      "train": 18,
+      "test": 4
+    },
+    "META": {
+      "train": 6,
+      "validation": 1,
+      "test": 2
+    }
+  },
+  "totals_by_split": {
+    "train": 37,
+    "validation": 8,
+    "test": 9
+  },
+  "split_seed": 211,
+  "grouping_rule": "Perceptually similar groups listed in the supplied near_duplicate_review.csv are kept in one split; full prompt/session group identifiers were not supplied.",
+  "near_duplicate_groups_kept_together": {
+    "GEMINI_NEAR_DUP_GROUP_A": [
+      "GEMINI/gemini_017.jpg",
+      "GEMINI/gemini_018.jpeg",
+      "GEMINI/gemini_019.jpeg"
+    ],
+    "GEMINI_NEAR_DUP_GROUP_B": [
+      "GEMINI/gemini_007.png",
+      "GEMINI/gemini_011.png"
+    ],
+    "META_NEAR_DUP_GROUP_A": [
+      "META/meta_007.jpg",
+      "META/meta_009.jpg"
+    ]
+  },
+  "note": "17 held-out images are small exploratory challenge sets, not enough for robust per-generator performance claims. GPT/Gemini/Meta attribution inherits user-provided folder labels."
+}

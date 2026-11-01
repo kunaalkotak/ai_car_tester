@@ -33,3 +33,8 @@ The seven notebooks at the top of `notebooks/` are documented guide/reconstructi
 ## Reproducibility boundary
 
 The notebooks explain the workflow and contain reusable validation code, but dataset assembly, the full audit, V2 split assignment, and V3 retraining cannot be fully reproduced from this ZIP alone because the source archives, 1,250 images, per-image manifests, original V3 training script and prediction exports are deliberately absent or were not recovered. The final app remains runnable with the packaged model and application dependencies only.
+
+
+## Final V4 repository packaging
+
+The final GitHub repository distributes only the active V4 model. The historical V3 checkpoint was used as the fine-tuning source and its SHA-256 is preserved in the V3/V4 records, but the V3 weight file is intentionally excluded because it is not required for application inference. Reproducing V4 fine-tuning requires supplying that exact V3 checkpoint, the original source datasets and the new AI candidate images/manifest separately.

@@ -1,7 +1,7 @@
 {
   "model_display_name": "CNN",
   "technical_backbone": "ImageNet-pretrained EfficientNetB0",
-  "model_file": "models_v3/car_cnn_model_v3.keras",
+  "model_file": "Historical V3 starting checkpoint; weights not included in final V4 app repository.",
   "model_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
   "input_shape": [
     256,
@@ -57,5 +57,5 @@
     "Learning-rate-reduction factor/patience/minimum learning rate",
     "Original epoch history and per-image prediction scores"
   ],
-  "note": "This is a configuration record, not evidence that the original run was executed from a notebook in this repository. The V3 weights are preserved unchanged."
+  "note": "Historical V3 training configuration record. The V3 checkpoint was used to initialise V4 fine-tuning but is intentionally not distributed in this repository; the active V4 model is self-contained for inference."
 }

@@ -37,4 +37,4 @@ AI-generated score; compare with threshold 0.50
 - Inference uses raw RGB 0–255 values; the model contains normalization layers, so the application must not pre-divide by 255.
 - Training augmentation is disabled during inference.
 
-The active V4 model is a fine-tuned continuation of the preserved V3 EfficientNetB0 checkpoint. The active model SHA-256 is checked by the inference loader and recorded in `config/cnn_inference_config.json`. V3 remains in `models_v3/` as an unchanged rollback backup.
+The active V4 model is a fine-tuned continuation of a historical V3 EfficientNetB0 checkpoint. The V3 starting weights are not included in this final repository because they are not needed for inference. The active V4 model SHA-256 is checked by the inference loader and recorded in `config/cnn_inference_config.json`. The historical V3 source hash and evaluation metrics remain documented.

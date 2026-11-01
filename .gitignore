@@ -1,29 +1,59 @@
-# Python environments
-.venv/
-.venv-arm64/
+# Python bytecode and local caches
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
-# Jupyter
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+env/
+
+# Local editor/OS/secrets
+.DS_Store
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Notebook temporary files
 .ipynb_checkpoints/
+*.tmp
+*.log
 
-# Dataset copies
+# Local datasets, source archives and generated training data
+datasets/
+dataset/
+data/
 /data_v4/
 /data_v4_full/
-
-# Training checkpoints and outputs
 /outputs_v4/
 /outputs_v4_full/
+/v4_training/
+/challenge_eval/
+*.parquet
+*.tfrecord*
+*.zip
+*.7z
+*.tar
+*.tar.gz
 
-# Local challenge photographs
-/challenge_eval/data/
-/challenge_eval/results/
+__pycache__/
+.venv/
+.venv-arm64/
 
-# Raw AI candidate collection
-/v4_training/ai_candidates/
+data_v4/
+data_v4_full/
 
-# macOS
+outputs_v4/
+outputs_v4_full/
+
+*.pyc
 .DS_Store
-
-# Secrets
-.env
+# Note: do not ignore *.keras globally; the active V4 model is intentionally tracked.

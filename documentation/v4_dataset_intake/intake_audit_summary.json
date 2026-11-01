@@ -1,0 +1,19 @@
+{
+  "archive": "AI_GEN_IMAGES.zip",
+  "candidate_images": 54,
+  "counts_by_user_folder_label": {
+    "GPT": 26,
+    "GEMINI": 19,
+    "META": 9,
+    "UNSORTED": 0
+  },
+  "all_images_readable": true,
+  "exact_sha256_duplicate_groups": 0,
+  "perceptual_similarity_review_pairs": 5,
+  "perceptual_similarity_threshold_hamming_distance_max": 12,
+  "perceptual_similarity_note": "Heuristic candidate pairs only; no files automatically removed.",
+  "split_assignment": "None. Keep unassigned until prompt/group-aware train/validation/test splitting is planned.",
+  "original_image_bytes_preserved": true,
+  "macos_metadata_files_removed": true,
+  "source_attribution_note": "GPT/GEMINI/META attribution is inherited from the uploaded folder names; not independently authenticated."
+}
