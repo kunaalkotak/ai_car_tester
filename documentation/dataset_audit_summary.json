@@ -1,0 +1,30 @@
+{
+  "dataset_version": "V2",
+  "candidate_images_processed_in_first_pass": 1250,
+  "images_flagged_for_manual_review": 183,
+  "automatic_deletion_based_only_on_heuristic_flags": false,
+  "review_policy": "Flagged images were not automatically deleted. Readable and usable images were retained even with imperfect composition, unusual aspect ratio or object-detection failure.",
+  "checks_recorded": [
+    "readability",
+    "dimensions",
+    "aspect_ratio",
+    "brightness",
+    "contrast",
+    "blur",
+    "SHA-256",
+    "decoded_pixel_hash",
+    "perceptual_hash",
+    "car_object_detection_screening",
+    "quality_flags",
+    "review_priority",
+    "contact_sheets",
+    "manual_review"
+  ],
+  "object_detection_role": "quality-screening aid only; not proof of car presence, authenticity or usability",
+  "limitations": [
+    "Real-image authenticity was not independently verified for every image.",
+    "AI labels and generator identities were inherited from source manifests or folder labels.",
+    "Exact historical heuristic thresholds and full per-image V2 audit manifest were not recovered.",
+    "The recovered notebook audit code is a documented reconstruction and will not necessarily reproduce the historical 183-item review queue."
+  ]
+}

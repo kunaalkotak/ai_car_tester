@@ -1,0 +1,124 @@
+{
+  "project": "Listing Lens – Used Car Photo Authenticity Checker",
+  "model_name": "CNN",
+  "model_file": "models_v3/car_cnn_model_v3.keras",
+  "model_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+  "architecture": {
+    "type": "ImageNet-pretrained EfficientNetB0 backbone, fine-tuned for binary image classification",
+    "input_shape": [
+      256,
+      256,
+      3
+    ],
+    "layers_summary": [
+      "Input (256, 256, 3), raw RGB pixel values 0..255",
+      "EfficientNetB0 backbone (include_top=False; built-in input normalisation)",
+      "GlobalAveragePooling2D",
+      "Dropout(0.40)",
+      "Dense(64, relu, L2 1e-4)",
+      "Dropout(0.30)",
+      "Dense(1, sigmoid)"
+    ],
+    "training_augmentation": [
+      "RandomFlip(horizontal)",
+      "RandomRotation(0.04)",
+      "RandomZoom(0.10)",
+      "RandomContrast(0.10)",
+      "RandomBrightness(0.10)"
+    ]
+  },
+  "labels": {
+    "0": "real",
+    "1": "ai_generated"
+  },
+  "decision_threshold": 0.47,
+  "threshold_selection": "Selected on validation balanced accuracy (middle of a near-optimal plateau) and frozen before test evaluation.",
+  "score_interpretation": "Uncalibrated sigmoid model score; not a calibrated probability.",
+  "input_preprocessing": {
+    "target_size": [
+      256,
+      256
+    ],
+    "color_channels": 3,
+    "tensorflow_decode": "tf.io.decode_image(..., channels=3, expand_animations=False)",
+    "resize": "tf.image.resize(..., (256, 256), method=\"bilinear\")",
+    "input_dtype_and_range": "float32, raw pixel range 0..255; EfficientNetB0 normalises internally (no external division by 255)",
+    "aspect_ratio_behavior": "Direct resize to 256x256 (stretches to square); no center crop in the training directory loader.",
+    "webp_handling": "For .webp uploads only: use Pillow to decode the first frame, convert to RGB and bilinearly resize to 256x256. This is a usability fallback because WebP files were skipped by the training directory loader; it was not represented in the V3 training evaluation.",
+    "other_formats": "JPEG/PNG/BMP/GIF bytes are passed to TensorFlow decoding before bilinear resize.",
+    "supported_extensions": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".bmp",
+      ".gif",
+      ".webp"
+    ]
+  },
+  "training": {
+    "dataset_expected_images": {
+      "train": 874,
+      "validation": 188,
+      "test": 188
+    },
+    "images_loaded_by_v3_training_run": {
+      "train": 872,
+      "validation": 185,
+      "test": 186
+    },
+    "webp_files_skipped_by_training_loader": {
+      "train": 2,
+      "validation": 3,
+      "test": 2
+    },
+    "phase_1": {
+      "backbone": "frozen",
+      "trainable_part": "classification head",
+      "learning_rate": 0.001,
+      "maximum_epochs": 15
+    },
+    "phase_2": {
+      "backbone": "top 40 layers unfrozen; Batch Normalization layers remain frozen",
+      "learning_rate": 0.00001,
+      "maximum_epochs": 25
+    },
+    "regularisation_and_callbacks": [
+      "Data augmentation",
+      "Dropout",
+      "L2 regularisation",
+      "Label smoothing (0.05)",
+      "Early stopping",
+      "Learning-rate reduction"
+    ],
+    "seed": 42,
+    "split_seed": 211,
+    "test_used_during_training_or_tuning": false,
+    "held_out_generator_evaluation": false
+  },
+  "validation_metrics": {
+    "accuracy": 0.9784,
+    "balanced_accuracy": 0.9787,
+    "precision_ai": 1.0,
+    "recall_ai": 0.9574,
+    "f1_ai": 0.9783,
+    "roc_auc": 0.9964,
+    "images_loaded": 185
+  },
+  "test_metrics": {
+    "accuracy": 0.9408602150537635,
+    "balanced_accuracy": 0.9410268270120259,
+    "precision_ai": 0.9560439560439561,
+    "recall_ai": 0.925531914893617,
+    "f1_ai": 0.9405405405405406,
+    "roc_auc": 0.995259019426457,
+    "images_loaded": 186,
+    "decision_threshold": 0.47
+  },
+  "runtime_versions": {
+    "python": "3.11.18",
+    "architecture": "arm64",
+    "tensorflow": "2.21.0",
+    "keras": "3.13.2",
+    "numpy": "2.1.3"
+  }
+}

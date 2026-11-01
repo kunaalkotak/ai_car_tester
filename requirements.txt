@@ -1,0 +1,7 @@
+# Runtime dependencies for the single-model Listing Lens Streamlit app.
+# Version pins match the recorded EfficientNetB0 V3 model runtime.
+streamlit==1.66.1
+numpy==2.1.3
+Pillow>=10.0,<13.0
+tensorflow==2.21.0
+keras==3.13.2

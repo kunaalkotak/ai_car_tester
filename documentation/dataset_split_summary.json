@@ -1,0 +1,53 @@
+{
+  "dataset_version": "V2",
+  "target_ratio": "70:15:15",
+  "split_seed": 211,
+  "expected_split_counts": {
+    "train": {
+      "real": 437,
+      "ai_generated": 437,
+      "total": 874
+    },
+    "validation": {
+      "real": 94,
+      "ai_generated": 94,
+      "total": 188
+    },
+    "test": {
+      "real": 94,
+      "ai_generated": 94,
+      "total": 188
+    },
+    "total": {
+      "real": 625,
+      "ai_generated": 625,
+      "total": 1250
+    }
+  },
+  "checks_recorded": [
+    "hash checks",
+    "group checks"
+  ],
+  "v3_training_loader_counts": {
+    "train": {
+      "expected": 874,
+      "loaded": 872,
+      "skipped_webp": 2
+    },
+    "validation": {
+      "expected": 188,
+      "loaded": 185,
+      "skipped_webp": 3
+    },
+    "test": {
+      "expected": 188,
+      "loaded": 186,
+      "skipped_webp": 2
+    }
+  },
+  "limitations": [
+    "Original per-image V2 split manifest and exact V2 split-generation notebook were not recovered.",
+    "Recovered earlier 198-image pilot split notebook uses random_state=42 and is not the V2 split.",
+    "V3 evaluation was not held out by generator; source groups overlap across splits."
+  ]
+}

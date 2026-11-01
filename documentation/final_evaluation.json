@@ -1,0 +1,52 @@
+{
+  "model": "EfficientNetB0 V3 (application display name: CNN)",
+  "threshold": 0.47,
+  "threshold_selection": "Validation balanced accuracy; middle of a near-optimal plateau; frozen before test evaluation.",
+  "validation": {
+    "accuracy": 0.9784,
+    "balanced_accuracy": 0.9787,
+    "precision_ai": 1.0,
+    "recall_ai": 0.9574,
+    "f1_ai": 0.9783,
+    "roc_auc": 0.9964,
+    "images_loaded": 185
+  },
+  "test": {
+    "accuracy": 0.9408602150537635,
+    "balanced_accuracy": 0.9410268270120259,
+    "precision_ai": 0.9560439560439561,
+    "recall_ai": 0.925531914893617,
+    "f1_ai": 0.9405405405405406,
+    "roc_auc": 0.995259019426457,
+    "images_loaded": 186
+  },
+  "test_confusion_matrix_reconstructed": {
+    "rows_actual": [
+      "real",
+      "ai_generated"
+    ],
+    "columns_predicted": [
+      "real",
+      "ai_generated"
+    ],
+    "counts": [
+      [
+        88,
+        4
+      ],
+      [
+        7,
+        87
+      ]
+    ],
+    "note": "Counts reproduce the recorded test metric fractions and support, but are reconstructed from the metric summary because the original V3 per-image prediction export was not recovered."
+  },
+  "roc_curve": "Not reconstructed. Per-image y_true and sigmoid scores were not available; AUC alone cannot reconstruct the ROC coordinates.",
+  "limitations": [
+    "Keras directory loader skipped 2 train, 3 validation and 2 test WebP files.",
+    "V3 metrics use 872 train, 185 validation and 186 test images.",
+    "Source groups overlap across splits; no held-out-generator test was performed.",
+    "Labels were inherited from source manifests/folders.",
+    "The sigmoid score is uncalibrated."
+  ]
+}

@@ -1,0 +1,12 @@
+experiment,model,validation_accuracy,test_accuracy,test_precision_ai,test_recall_ai,test_f1_ai,test_roc_auc,threshold,effective_test_images,notes
+V1,Custom CNN,0.8889,0.7826,,,,,,46,Historical baseline from project record; 46-image test set.
+V1,Random Forest,0.8889,0.7174,,,,,,46,Historical baseline from project record; 46-image test set.
+V1,SVM (RBF),0.8444,0.7609,,,,,,46,Historical baseline from project record; 46-image test set.
+V1,Logistic Regression,0.8222,0.7174,,,,,,46,Historical baseline from project record; 46-image test set.
+V1,LDA,0.8222,0.6957,,,,,,46,Historical baseline from project record; 46-image test set.
+V2,Custom CNN V2,,0.8245,0.7798,0.9043,0.8374,0.8943,0.32,,Values from project record; per-image report and effective loaded count not recovered.
+V2,SVM (RBF),,0.7553,,,0.7416,,,,Only test accuracy and AI F1 were supplied.
+V2,Random Forest,,0.734,,,0.7283,,,,Only test accuracy and AI F1 were supplied.
+V2,Logistic Regression,,0.6596,,,0.6444,,,,Only test accuracy and AI F1 were supplied.
+V2,LDA,,0.6436,,,0.6298,,,,Only test accuracy and AI F1 were supplied.
+V3,EfficientNetB0 (app display: CNN),0.9784,0.9408602150537635,0.9560439560439561,0.925531914893617,0.9405405405405406,0.995259019426457,0.47,186,"Validation metrics are 0.9784 accuracy, 0.9787 balanced accuracy, 1.0 precision, 0.9574 recall, 0.9783 F1, 0.9964 AUC on 185 loaded images. Test loaded 186 images after 2 WebP skips."

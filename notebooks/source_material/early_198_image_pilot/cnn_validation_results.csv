@@ -1,0 +1,2 @@
+model,accuracy,precision_ai,recall_ai,f1_ai,validation_images,decision_threshold
+Small CNN (trained from scratch),0.8333333333333334,0.8571428571428571,0.8,0.8275862068965517,30,0.5

@@ -1,0 +1,21 @@
+{
+  "source_repository": "https://github.com/hzlsaber/FGTS",
+  "source_training_set_drive_file_id": "1hnBWMVkZe0W60XGG_q8GYqnJGV8hTzQB",
+  "source_folder_mapping": {
+    "LDM": "1_fake_ldm",
+    "Stable_Diffusion_1_4": "1_fake_sd14",
+    "ProGAN": "1_fake"
+  },
+  "target_per_generator": 158,
+  "matched_source_id_sampling": false,
+  "common_source_id_count": 0,
+  "extracted_counts_by_generator": {
+    "LDM": 158,
+    "Stable_Diffusion_1_4": 158,
+    "ProGAN": 158
+  },
+  "total_extracted": 474,
+  "exact_duplicate_or_invalid_skipped": 0,
+  "random_seed": 42,
+  "note": "Candidate AI-generated car images only. Validate sample contact sheet and deduplicate against the existing project AI collection before merging."
+}
