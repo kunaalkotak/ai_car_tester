@@ -1,0 +1,3 @@
+# The main Listing Lens environment already installs TensorFlow, NumPy and Pillow.
+# Install only if missing:
+scikit-learn>=1.5,<2.0

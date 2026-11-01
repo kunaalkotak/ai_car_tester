@@ -1,8 +1,8 @@
 {
-  "project": "Listing Lens – Used Car Photo Authenticity Checker",
+  "project": "Listing Lens \u2013 Used Car Photo Authenticity Checker",
   "model_name": "CNN",
-  "model_file": "models_v3/car_cnn_model_v3.keras",
-  "model_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+  "model_file": "models_v4/car_cnn_model_v4.keras",
+  "model_sha256": "36b6e3fe95278cb73923ec01e109671278fe97877e5bb7beae4b947fcd3f6d3e",
   "architecture": {
     "type": "ImageNet-pretrained EfficientNetB0 backbone, fine-tuned for binary image classification",
     "input_shape": [
@@ -31,8 +31,8 @@
     "0": "real",
     "1": "ai_generated"
   },
-  "decision_threshold": 0.47,
-  "threshold_selection": "Selected on validation balanced accuracy (middle of a near-optimal plateau) and frozen before test evaluation.",
+  "decision_threshold": 0.5,
+  "threshold_selection": "Selected on the V4 validation split by balanced accuracy and frozen before test evaluation.",
   "score_interpretation": "Uncalibrated sigmoid model score; not a calibrated probability.",
   "input_preprocessing": {
     "target_size": [
@@ -44,7 +44,7 @@
     "resize": "tf.image.resize(..., (256, 256), method=\"bilinear\")",
     "input_dtype_and_range": "float32, raw pixel range 0..255; EfficientNetB0 normalises internally (no external division by 255)",
     "aspect_ratio_behavior": "Direct resize to 256x256 (stretches to square); no center crop in the training directory loader.",
-    "webp_handling": "For .webp uploads only: use Pillow to decode the first frame, convert to RGB and bilinearly resize to 256x256. This is a usability fallback because WebP files were skipped by the training directory loader; it was not represented in the V3 training evaluation.",
+    "webp_handling": "Pillow RGB decode and bilinear resize to 256x256 for upload support. V4 training loaded all 1,304 dataset images; all split counts matched expected counts.",
     "other_formats": "JPEG/PNG/BMP/GIF bytes are passed to TensorFlow decoding before bilinear resize.",
     "supported_extensions": [
       ".jpg",
@@ -56,63 +56,87 @@
     ]
   },
   "training": {
+    "dataset_version": "V4",
     "dataset_expected_images": {
-      "train": 874,
-      "validation": 188,
-      "test": 188
+      "train": 911,
+      "validation": 196,
+      "test": 197,
+      "total": 1304
     },
-    "images_loaded_by_v3_training_run": {
-      "train": 872,
-      "validation": 185,
-      "test": 186
+    "images_loaded_by_v4_training_run": {
+      "train": 911,
+      "validation": 196,
+      "test": 197,
+      "total": 1304
     },
-    "webp_files_skipped_by_training_loader": {
-      "train": 2,
-      "validation": 3,
-      "test": 2
+    "class_counts": {
+      "train": {
+        "real": 437,
+        "ai_generated": 474
+      },
+      "validation": {
+        "real": 94,
+        "ai_generated": 102
+      },
+      "test": {
+        "real": 94,
+        "ai_generated": 103
+      }
     },
+    "new_ai_images_added": 54,
+    "new_ai_images_by_generator": {
+      "GPT": 26,
+      "Gemini": 19,
+      "Meta AI": 9
+    },
+    "new_ai_images_by_split": {
+      "train": 37,
+      "validation": 8,
+      "test": 9
+    },
+    "fine_tuned_from": "models_v3/car_cnn_model_v3.keras",
     "phase_1": {
       "backbone": "frozen",
       "trainable_part": "classification head",
-      "learning_rate": 0.001,
-      "maximum_epochs": 15
+      "learning_rate": 0.0001,
+      "maximum_epochs": 5
     },
     "phase_2": {
-      "backbone": "top 40 layers unfrozen; Batch Normalization layers remain frozen",
-      "learning_rate": 0.00001,
-      "maximum_epochs": 25
+      "backbone": "top 40 layers trainable; Batch Normalization layers frozen",
+      "learning_rate": 1e-05,
+      "maximum_epochs": 12,
+      "epochs_recorded": 8
     },
-    "regularisation_and_callbacks": [
-      "Data augmentation",
-      "Dropout",
-      "L2 regularisation",
-      "Label smoothing (0.05)",
-      "Early stopping",
-      "Learning-rate reduction"
-    ],
+    "optimizer": "Adam",
+    "loss": "BinaryCrossentropy(label_smoothing=0.05)",
+    "batch_size": 8,
+    "class_weights": {
+      "0": 1.0423340961098397,
+      "1": 0.9609704641350211
+    },
     "seed": 42,
-    "split_seed": 211,
-    "test_used_during_training_or_tuning": false,
+    "test_used_during_training_or_threshold_tuning": false,
     "held_out_generator_evaluation": false
   },
   "validation_metrics": {
-    "accuracy": 0.9784,
-    "balanced_accuracy": 0.9787,
-    "precision_ai": 1.0,
-    "recall_ai": 0.9574,
-    "f1_ai": 0.9783,
-    "roc_auc": 0.9964,
-    "images_loaded": 185
+    "accuracy": 0.9540816326530612,
+    "balanced_accuracy": 0.954630788485607,
+    "precision_ai": 0.9696969696969697,
+    "recall_ai": 0.9411764705882353,
+    "f1_ai": 0.9552238805970149,
+    "roc_auc": 0.9936378806841886,
+    "images_loaded": 196,
+    "decision_threshold": 0.5
   },
   "test_metrics": {
-    "accuracy": 0.9408602150537635,
-    "balanced_accuracy": 0.9410268270120259,
-    "precision_ai": 0.9560439560439561,
-    "recall_ai": 0.925531914893617,
-    "f1_ai": 0.9405405405405406,
-    "roc_auc": 0.995259019426457,
-    "images_loaded": 186,
-    "decision_threshold": 0.47
+    "accuracy": 0.9390862944162437,
+    "balanced_accuracy": 0.9384941127866143,
+    "precision_ai": 0.9333333333333333,
+    "recall_ai": 0.9514563106796117,
+    "f1_ai": 0.9423076923076923,
+    "roc_auc": 0.9889485643462095,
+    "images_loaded": 197,
+    "decision_threshold": 0.5
   },
   "runtime_versions": {
     "python": "3.11.18",
@@ -120,5 +144,12 @@
     "tensorflow": "2.21.0",
     "keras": "3.13.2",
     "numpy": "2.1.3"
+  },
+  "previous_model_backup": {
+    "model_name": "CNN V3 backup",
+    "model_file": "models_v3/car_cnn_model_v3.keras",
+    "model_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+    "historical_original_threshold": 0.47,
+    "same_v4_test_split_comparison_threshold": 0.4
   }
 }

@@ -1,4 +1,4 @@
-# Final CNN Architecture — Technical Description
+# Active CNN V4 Architecture — Technical Description
 
 The Streamlit application calls the selected model **CNN**. Its saved technical architecture uses an ImageNet-pretrained EfficientNetB0 backbone.
 
@@ -28,7 +28,7 @@ Dropout(0.30)
 Dense(1, Sigmoid)
     │
     ▼
-AI-generated score; compare with threshold 0.47
+AI-generated score; compare with threshold 0.50
 ```
 
 - Class 0: `real`
@@ -37,4 +37,4 @@ AI-generated score; compare with threshold 0.47
 - Inference uses raw RGB 0–255 values; the model contains normalization layers, so the application must not pre-divide by 255.
 - Training augmentation is disabled during inference.
 
-The model file is preserved as received. Its SHA-256 is checked by the inference loader and recorded in `config/cnn_inference_config.json`.
+The active V4 model is a fine-tuned continuation of the preserved V3 EfficientNetB0 checkpoint. The active model SHA-256 is checked by the inference loader and recorded in `config/cnn_inference_config.json`. V3 remains in `models_v3/` as an unchanged rollback backup.

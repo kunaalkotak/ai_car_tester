@@ -1,23 +1,29 @@
-# Local Python environments
-.venv*/
-venv/
+# Python environments
+.venv/
+.venv-arm64/
 __pycache__/
 *.py[cod]
 
-# Jupyter temporary files
+# Jupyter
 .ipynb_checkpoints/
+
+# Dataset copies
+/data_v4/
+/data_v4_full/
+
+# Training checkpoints and outputs
+/outputs_v4/
+/outputs_v4_full/
+
+# Local challenge photographs
+/challenge_eval/data/
+/challenge_eval/results/
+
+# Raw AI candidate collection
+/v4_training/ai_candidates/
 
 # macOS
 .DS_Store
 
 # Secrets
 .env
-.env.*
-!.env.example
-
-# Local datasets and source archives
-datasets/
-dataset/
-data/
-candidate_downloads/
-*.zip

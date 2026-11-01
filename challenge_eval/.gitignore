@@ -1,0 +1,10 @@
+# Keep external challenge photographs and evaluation outputs private/local.
+data/*
+!data/real/
+!data/ai_generated/
+!data/real/.gitkeep
+!data/ai_generated/GPT/.gitkeep
+!data/ai_generated/Gemini/.gitkeep
+!data/ai_generated/Meta_AI/.gitkeep
+results/*
+!results/.gitkeep

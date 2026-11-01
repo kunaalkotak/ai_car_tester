@@ -44,7 +44,7 @@ RGB decoding and 256 × 256 resize
        Sigmoid model score
               │
               ▼
-     Apply 0.47 threshold
+     Apply 0.50 threshold
           /       \
          /         \
         ▼           ▼
@@ -55,10 +55,10 @@ RGB decoding and 256 × 256 resize
        Result, score and buyer guidance
 ```
 
-The app loads the saved model once and reuses it for later predictions during the Streamlit session. It accepts a single image, creates a preview, preprocesses the image, obtains the model's sigmoid output and compares that output with the fixed decision threshold of **0.47**.
+The app loads the saved model once and reuses it for later predictions during the Streamlit session. It accepts a single image, creates a preview, preprocesses the image, obtains the model's sigmoid output and compares that output with the fixed decision threshold of **0.50**.
 
-- A score **below 0.47** is classified as `Real (0)` / photograph-looking.
-- A score **at or above 0.47** is classified as `AI-generated (1)` / AI-generated-looking.
+- A score **below 0.50** is classified as `Real (0)` / photograph-looking.
+- A score **at or above 0.50** is classified as `AI-generated (1)` / AI-generated-looking.
 
 The displayed score is an **uncalibrated model output**. It is not a calibrated probability that a photograph is AI-generated, and it is not the probability that a listing is fraudulent.
 
@@ -69,7 +69,7 @@ The displayed score is an **uncalibrated model output**. It is not a calibrated 
 - Image upload and preview, including image dimensions and file size.
 - Support for JPG, JPEG, PNG, WebP, BMP and GIF uploads. Animated GIFs use their first frame.
 - A plain-language result card explaining the model's assessment.
-- A score display showing the AI-pattern model score and the 0.47 decision boundary.
+- A score display showing the AI-pattern model score and the 0.50 decision boundary.
 - Practical guidance to request fresh images, a walk-around video, vehicle documents and an independent inspection.
 - A clear explanation of what the tool can and cannot establish.
 
@@ -225,9 +225,9 @@ The Dataset V2 classical model test results were:
 
 The results suggested that the custom CNN was stronger than the four classical approaches in the recorded V2 evaluation. The project then moved beyond the classical feature-based models and experimented with transfer learning using EfficientNetB0.
 
-## 9. Final CNN experiment: EfficientNetB0
+## 9. EfficientNetB0 model development history
 
-The final selected model is the project's EfficientNetB0 V3 experiment. In the Streamlit application, it is displayed simply as **CNN**. For technical transparency, its architecture is an **ImageNet-pretrained EfficientNetB0 backbone** fine-tuned for binary image classification.
+The current application model is **EfficientNetB0 V4**, fine-tuned from the project's EfficientNetB0 V3 checkpoint. In the Streamlit application, it is displayed simply as **CNN**. For technical transparency, its architecture is an **ImageNet-pretrained EfficientNetB0 backbone** fine-tuned for binary image classification.
 
 ### 9.1 Model architecture
 
@@ -259,7 +259,7 @@ The model accepts raw RGB values in the 0–255 range. EfficientNetB0's built-in
 
 Other recorded techniques included data augmentation, dropout, L2 regularisation, label smoothing (0.05), early stopping and learning-rate reduction. Training augmentation included horizontal flipping, small rotations, zoom, contrast changes and brightness changes. Augmentation is a training-time procedure; the inference application does not randomly augment the buyer's uploaded photograph.
 
-### 9.3 V3 experiment results
+### 9.3 Previous V3 experiment results (preserved baseline)
 
 The preliminary V3 metrics were recorded as follows:
 
@@ -279,7 +279,7 @@ The V3 results were produced from **872 training images, 185 validation images a
 
 The V3 test set was not used for training or threshold tuning. However, this evaluation was not a held-out-generator test. The project has not established that the model generalises to completely unseen image generators, image-generation services or future model families.
 
-### 9.4 Experiment comparison at a glance
+### 9.4 Historical V1–V3 experiment comparison
 
 The following table brings together the three stages of model development. The results are reported in their original evaluation contexts; different dataset versions and test-set sizes mean they are not a perfectly controlled head-to-head comparison.
 
@@ -295,24 +295,76 @@ The following table brings together the three stages of model development. The r
 | V2 | Random Forest | Not repeated here | 73.40% | 72.83% | Dataset V2 experiment; effective loaded count not recovered |
 | V2 | Logistic Regression | Not repeated here | 65.96% | 64.44% | Dataset V2 experiment; effective loaded count not recovered |
 | V2 | LDA | Not repeated here | 64.36% | 62.98% | Dataset V2 experiment; effective loaded count not recovered |
-| V3 | EfficientNetB0 experiment (app name: CNN) | 97.84% | 94.09% | 94.05% | 185 validation / 186 test images loaded |
+| V3 | EfficientNetB0 experiment (historical app model) | 97.84% | 94.09% | 94.05% | 185 validation / 186 test images loaded |
+| V4 | Fine-tuned EfficientNetB0 V3 (current app name: CNN) | 95.41% | 93.91% | 94.23% | 196 validation / 197 test images loaded; full 1,304-image split |
 
 The V1 AI F1 values and the V2 validation accuracy values are not reproduced in this summary table because they were not provided as part of the historical figures used for this README. The individual V1/V2 result tables above preserve the reported metrics without filling in missing values.
 
-## 10. Why EfficientNetB0 was selected
+## 10. Current application model: EfficientNetB0 V4
 
-EfficientNetB0 was selected for the final application because its observed results were substantially stronger than the earlier approaches in the project's available experiments. It achieved 94.09% accuracy and 94.05% AI F1-score on the 186 test images loaded in the V3 run, compared with 82.45% test accuracy and 83.74% AI F1-score for the custom CNN V2 experiment. The effective image count for the V2 model comparison was not recovered.
+The active Streamlit application now loads **V4**, a fine-tuned continuation of the V3 EfficientNetB0 checkpoint. The user-facing model name remains **CNN**. V3 has been retained unchanged in `models_v3/` as a rollback backup. V4 is stored separately in `models_v4/`.
 
-This is a practical model-selection decision based on the available results—not proof that EfficientNetB0 is universally more accurate. The V3 run skipped some WebP files, the V2 and V3 test evaluations did not use identical effective image counts, and neither evaluation established generalisation to fully unseen generators. A future controlled evaluation should rerun the pipeline with consistent file decoding and a separate held-out-generator test set.
+V4 was fine-tuned using the complete Dataset V2 split plus 54 new AI candidates from GPT (26), Gemini (19) and Meta AI (9). Only AI images were added; no real images were added or removed. The final split contained 1,304 images: 911 training (437 real, 474 AI), 196 validation (94 real, 102 AI) and 197 test (94 real, 103 AI). The training report confirms that all 1,304 files were loaded.
+
+**V4 training configuration**
+
+| Setting | V4 value |
+|---|---|
+| Starting checkpoint | Preserved EfficientNetB0 V3 |
+| Input | 256 × 256 × 3 RGB; float32, raw 0–255 |
+| Phase 1 | Frozen backbone; classification head; learning rate 0.0001; up to 5 epochs |
+| Phase 2 | Top 40 backbone layers fine-tuned; Batch Normalization frozen; learning rate 0.00001; up to 12 epochs |
+| Optimizer | Adam |
+| Loss | Binary cross-entropy with label smoothing 0.05 |
+| Batch size | 8 |
+| Class weighting | 1.0423 (real), 0.9610 (AI-generated) |
+| Random seed | 42 |
+
+### V4 results
+
+The decision threshold of **0.50** was selected using V4 validation balanced accuracy and frozen before test evaluation.
+
+| Metric | Validation | Test |
+|---|---:|---:|
+| Accuracy | 95.41% | 93.91% |
+| Balanced accuracy | 95.46% | 93.85% |
+| AI precision | 96.97% | 93.33% |
+| AI recall | 94.12% | 95.15% |
+| AI F1-score | 95.52% | 94.23% |
+| ROC-AUC | 99.36% | 98.89% |
+| Images loaded | 196 | 197 |
+
+Test confusion matrix (rows = actual [real, AI]; columns = predicted [real, AI]): `[[87, 7], [5, 98]]`. V4 detects more AI examples than V3 at the validation-selected comparison thresholds, but has lower AI precision and more real-image false positives.
+
+### V3 versus V4 on the same V4 test set
+
+Each model's operating threshold was selected independently on the same V4 validation split (V3 = 0.40; V4 = 0.50). This is the fairest threshold-based comparison available in the training report.
+
+| Metric | V3 backup | V4 active |
+|---|---:|---:|
+| Accuracy | 93.40% | **93.91%** |
+| Balanced accuracy | 93.50% | **93.85%** |
+| AI precision | **95.92%** | 93.33% |
+| AI recall | 91.26% | **95.15%** |
+| AI F1-score | 93.53% | **94.23%** |
+| ROC-AUC | 97.98% | **98.89%** |
+
+The V4 improvement is real but modest. It favours AI recall and AUC, while V3 makes fewer false-positive AI predictions on genuine test photographs (4 versus 7). The final V4 threshold of 0.50 reflects the validation balanced-accuracy selection; it is not a calibrated probability boundary.
+
+### New-generator subset
+
+The V4 test split included nine new AI candidates: GPT 4/4 detected, Gemini 3/3 detected and Meta AI 2/2 detected. These counts are too small for reliable generator-specific claims. All three generator families were represented in the V4 development/training pool, so this is not a held-out-generator evaluation. The labels are based on user-provided source folders and were not independently authenticated.
+
+V4 was selected as the active application model for this project release, while V3 remains available for rollback. This is a practical project decision, not evidence that V4 will generalise to all future AI generators or marketplace conditions. See [V4 training report](documentation/v4_training_report.json), [V4 release notes](documentation/v4_release_notes.md), [V4 model comparison](documentation/v4_model_comparison.csv) and the retained [V3 evaluation](documentation/v3_final_evaluation.json).
 
 ## 11. Model threshold and score interpretation
 
-The final application uses a fixed decision threshold of **0.47**:
+The final application uses a fixed decision threshold of **0.50**:
 
 | CNN output | Application label |
 |---|---|
-| Score < 0.47 | Real / photograph-looking (class 0) |
-| Score ≥ 0.47 | AI-generated-looking (class 1) |
+| Score < 0.50 | Real / photograph-looking (class 0) |
+| Score ≥ 0.50 | AI-generated-looking (class 1) |
 
 The threshold was selected on the validation set using balanced accuracy and frozen before test evaluation. It is stored in `config/cnn_inference_config.json` and imported by the inference module, so the application and configuration share one value.
 
@@ -320,7 +372,7 @@ The displayed score is the model's sigmoid output expressed on a 0–100 display
 
 ## 12. Inference preprocessing
 
-Preprocessing is part of the model pipeline. The inference code follows the recorded training input route as closely as possible.
+Preprocessing is part of the model pipeline. The inference code follows the recorded training input route: RGB decoding, direct bilinear resize to 256 × 256 and raw 0–255 float32 values. EfficientNetB0 normalization remains inside the saved model.
 
 | Step | Inference behaviour |
 |---|---|
@@ -334,13 +386,13 @@ Preprocessing is part of the model pipeline. The inference code follows the reco
 | GIF | Uses the first frame |
 | WebP | Pillow RGB decoding and bilinear resize as an inference-only fallback |
 
-JPEG, PNG, BMP and GIF inputs are decoded with `tf.io.decode_image(..., channels=3, expand_animations=False)` and resized with `tf.image.resize(..., method="bilinear")`. WebP bytes are decoded with Pillow, converted to RGB and bilinearly resized directly to a float32 array. This is an inference-only fallback because the V3 training directory loader skipped WebP files; WebP predictions should therefore be treated with that additional training-coverage limitation in mind.
+JPEG, PNG, BMP and GIF inputs are decoded with `tf.io.decode_image(..., channels=3, expand_animations=False)` and resized with `tf.image.resize(..., method="bilinear")`. WebP bytes are decoded with Pillow, converted to RGB and bilinearly resized directly to a float32 array. This is an inference-time compatibility path. The V4 training report records that all 1,304 files in its V4 split were loaded; the earlier V3 WebP shortfall is retained as historical context in the V3 evaluation record.
 
 The user-facing preview applies EXIF orientation so that the image appears correctly in the interface. The model preprocessing follows the documented training decode-and-resize route for formats represented in training, with the separate WebP fallback described above.
 
 ## 13. Project structure and academic development trail
 
-The repository deliberately separates the **active single-model application** from the **academic notebooks and historical evidence**. The application imports only the final CNN inference path. The notebooks preserve the ML development story without restoring the older models to the live UI.
+The repository deliberately separates the **active single-model application** from the **academic notebooks and historical evidence**. The application imports only the active V4 CNN inference path; the preserved V3 file is a rollback backup and is not loaded by the UI. The notebooks preserve the ML development story without restoring the older models to the live UI.
 
 ```text
 Listing-Lens/
@@ -355,10 +407,14 @@ Listing-Lens/
 ├── config/
 │   └── cnn_inference_config.json
 ├── models_v3/
-│   └── car_cnn_model_v3.keras        # One preserved final model
+│   └── car_cnn_model_v3.keras        # Preserved V3 rollback backup
+├── models_v4/
+│   └── car_cnn_model_v4.keras        # Active application model (CNN)
 ├── src/
 │   ├── __init__.py
 │   └── cnn_inference.py              # Only active inference implementation
+├── scripts/
+│   └── verify_active_cnn.py          # Active model load/prediction smoke test
 ├── notebooks/
 │   ├── 01_dataset_collection_assembly.ipynb
 │   ├── 02_dataset_quality_audit.ipynb
@@ -377,8 +433,14 @@ Listing-Lens/
     ├── dataset_split_summary.json
     ├── model_architecture.md
     ├── model_comparison.csv
-    ├── training_configuration.json
-    ├── final_evaluation.json
+    ├── training_configuration.json  # V3 historical training config
+    ├── v3_final_evaluation.json
+    ├── final_evaluation.json        # Current V4 evaluation
+    ├── v4_training_report.json
+    ├── v4_phase1_history.csv
+    ├── v4_phase2_history.csv
+    ├── v4_model_comparison.csv
+    ├── v4_release_notes.md
     ├── source_availability.md
     ├── source_evidence/
     │   └── fgts_collection_summary.json
@@ -396,7 +458,7 @@ Listing-Lens/
 | 4 | [Original five-model experiments](notebooks/04_original_five_model_experiments.ipynb) | Logistic Regression, SVM, Random Forest, LDA and custom CNN; historical V1 baseline results |
 | 5 | [Dataset V2 model comparison](notebooks/05_dataset_v2_model_comparison.ipynb) | V2 CNN and classical model results, metrics and threshold interpretation |
 | 6 | [EfficientNetB0 V3 training](notebooks/06_efficientnetb0_v3_training.ipynb) | ImageNet backbone, model head, augmentation, frozen-head training and fine-tuning |
-| 7 | [Final model evaluation](notebooks/07_final_model_evaluation.ipynb) | Threshold 0.47, validation/test metrics, reconstructed test confusion matrix, ROC/error-analysis requirements and limitations |
+| 7 | [Final model evaluation](notebooks/07_final_model_evaluation.ipynb) | Historical V3 threshold 0.47, validation/test metrics, reconstructed test confusion matrix, ROC/error-analysis requirements and limitations |
 
 The seven top-level notebooks are **documented reconstructions/guide notebooks**, not falsely represented as the original executed notebooks. This is particularly important for Stages 1–3 and 6–7: the original V2 per-image source/audit/split manifests and the V3 `train_improved.py` (or equivalent training source) were not recovered. Each notebook states what is recorded, what is reconstructed, and what cannot be reproduced without the source images or missing artifacts.
 
@@ -413,12 +475,15 @@ The archived car-image generation notebook documents a separate 100-image genera
 - [Dataset split summary](documentation/dataset_split_summary.json)
 - [Model architecture](documentation/model_architecture.md)
 - [Model comparison CSV](documentation/model_comparison.csv)
-- [V3 training configuration](documentation/training_configuration.json)
-- [Final evaluation summary](documentation/final_evaluation.json)
+- [V3 historical training configuration](documentation/training_configuration.json)
+- [V4 training report](documentation/v4_training_report.json)
+- [V4 model comparison](documentation/v4_model_comparison.csv)
+- [Current V4 evaluation summary](documentation/final_evaluation.json)
+- [V4 release notes](documentation/v4_release_notes.md)
 - [Source availability and reconstruction notes](documentation/source_availability.md)
 - [Package validation and reproducibility boundary](documentation/package_validation.md)
 
-The source image archives and all 1,250 images are deliberately excluded. The academic notebooks include reusable checks and clearly labelled reconstructions, but the full historical dataset assembly/audit/split and V3 retraining cannot be reproduced from this ZIP alone without the source images, original per-image manifests and original training script. The application itself remains a separate inference-only package using just one final CNN model.
+The source image archives and all 1,304 V4 images are deliberately excluded. The academic notebooks include reusable checks and clearly labelled reconstructions, but the full historical dataset assembly/audit/split and V3 retraining cannot be reproduced from this ZIP alone without the source images, original per-image manifests and original training script. V4 training outputs and histories are preserved as evidence; the exact training script used for the completed V4 run was not included in the supplied artifacts. The application remains an inference-only package with one active CNN model and one preserved rollback checkpoint.
 
 ## 14. Technology stack
 
@@ -431,11 +496,11 @@ The source image archives and all 1,250 images are deliberately excluded. The ac
 | NumPy 2.1.3 | Image tensor and prediction array handling |
 | Pillow | Image preview, EXIF orientation and WebP fallback decoding |
 
-The final application has one inference model. Scikit-learn, joblib, PCA and StandardScaler are not runtime dependencies because the classical models have been removed from the application.
+The final application has one active inference model (V4); V3 is retained separately as a rollback backup and is not loaded by the UI. Scikit-learn, joblib, PCA and StandardScaler are not runtime dependencies because the classical models have been removed from the application.
 
 ## 15. Installation on macOS Apple Silicon
 
-The recorded V3 runtime used Python 3.11 on ARM64 with TensorFlow 2.21.0, Keras 3.13.2 and NumPy 2.1.3. TensorFlow 2.21.0 provides a macOS ARM64 wheel for Python 3.11; this is the appropriate package family for an Apple Silicon Mac. See the [official TensorFlow pip installation guide](https://www.tensorflow.org/install/pip) and [TensorFlow package files](https://pypi.org/project/tensorflow/).
+The recorded V3 and V4 runs used the Python 3.11 ARM64 environment with TensorFlow 2.21.0, Keras 3.13.2 and NumPy 2.1.3. TensorFlow 2.21.0 provides a macOS ARM64 wheel for Python 3.11; this is the appropriate package family for an Apple Silicon Mac. See the [official TensorFlow pip installation guide](https://www.tensorflow.org/install/pip) and [TensorFlow package files](https://pypi.org/project/tensorflow/).
 
 ### Step 1 — Check Python and architecture
 
@@ -500,13 +565,14 @@ Open the seven notebooks in `notebooks/` in numerical order. The recovered origi
 
 ## 16. GitHub setup and upload
 
-The cleaned repository retains the trained model at:
+The repository retains the active V4 model and the V3 rollback backup:
 
 ```text
-models_v3/car_cnn_model_v3.keras
+models_v4/car_cnn_model_v4.keras  # active
+models_v3/car_cnn_model_v3.keras  # backup
 ```
 
-Its current size is **34,365,981 bytes (about 32.8 MiB)**. This is larger than GitHub's 25 MiB per-file browser-upload limit, but below the 100 MiB per-file limit for command-line Git uploads. Therefore, use Git from Terminal rather than dragging the model into GitHub's browser uploader. GitHub requires Git LFS for individual files larger than 100 MiB. See [GitHub's file upload guidance](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository) and [repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits).
+Each model is approximately 34 MB (about 32.8 MiB). This is larger than GitHub's 25 MiB per-file browser-upload limit, but below the 100 MiB per-file limit for command-line Git uploads. Therefore, use Git from Terminal rather than dragging the model into GitHub's browser uploader. GitHub requires Git LFS for individual files larger than 100 MiB. See [GitHub's file upload guidance](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository) and [repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits).
 
 ### Step 1 — Create an empty GitHub repository
 
@@ -535,7 +601,7 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 git push -u origin main
 ```
 
-The selected model will be included in the push. Git LFS is not required for the current 32.8 MiB model file, although LFS may be worth considering if future model versions become larger or repository history grows substantially.
+Both model files will be included in the push. Each is below GitHub's 100 MiB individual-file limit, so Git LFS is not required for this release.
 
 ## 17. Limitations and responsible use
 
@@ -543,16 +609,16 @@ The selected model will be included in the push. Git LFS is not required for the
 2. **Not fraud detection:** a real photograph can be used in a fraudulent listing; an AI-looking image does not prove that the vehicle or seller is fake.
 3. **Inherited labels:** real-image labels were not independently verified image by image, and AI labels and generator names were inherited from source labels/manifests.
 4. **Small evaluation sets:** V3 validation used 185 images and V3 testing used 186 images. Metrics from samples of this size have uncertainty.
-5. **Incomplete V3 split loading:** the V3 loader skipped two training, three validation and two test WebP files. The reported metrics use the smaller loaded counts.
-6. **No held-out-generator test:** source groups overlap across splits in the recorded V3 metadata. Generalisation to completely unseen generators has not been demonstrated.
+5. **Historical V3 split loading:** the V3 loader skipped two training, three validation and two test WebP files. V4 loaded all 1,304 files in its recorded split.
+6. **No held-out-generator test:** generator families GPT, Gemini and Meta AI appear in the V4 development/training pool and in the nine-image new-generator subset. Generalisation to completely unseen generator families has not been demonstrated.
 7. **Score calibration:** the displayed sigmoid score is not a calibrated probability.
 8. **Image distribution changes:** marketplace compression, screenshots, filters, image edits, new cameras and new generative models may affect performance.
-9. **WebP training coverage:** WebP uploads are accepted through the separate Pillow preprocessing fallback, but the V3 training loader skipped WebP source files.
+9. **Image-format handling:** WebP uploads are accepted through the Pillow preprocessing fallback. V4 training loaded all 1,304 files in its reported split; V3 had the historical WebP shortfall described above.
 10. **No buyer due diligence replacement:** always inspect the vehicle, verify its documents and seller, and avoid paying a deposit based only on an online photograph or model output.
 
 ### Future scope
 
-Potential next steps include rebuilding the V3 evaluation with consistent support for all image formats, obtaining a larger independently reviewed dataset, creating a genuinely held-out-generator test set, calibrating model scores, examining false positives and false negatives by source, and testing robustness to marketplace compression and image editing. These are future recommendations, not work claimed to have been completed in this project version.
+Potential next steps include obtaining a larger independently reviewed and genuinely held-out-generator evaluation set, calibrating model scores, examining false positives and false negatives by source, and testing robustness to marketplace compression and image editing. These are future recommendations, not work claimed to have been completed in this project version.
 
 ## 18. Credits and dataset acknowledgements
 
@@ -568,17 +634,29 @@ The source image archives are not redistributed in this repository. Before redis
 
 ## 19. Model artifact integrity
 
-The selected model is retained without retraining, conversion or modification.
+The active application model is V4. The V3 checkpoint is retained as an unchanged rollback backup.
 
-| Item | Verified value |
+| Item | Active V4 value |
 |---|---|
 | Application display name | CNN |
-| Technical architecture | ImageNet-pretrained EfficientNetB0 backbone |
-| Model path | `models_v3/car_cnn_model_v3.keras` |
+| Technical architecture | ImageNet-pretrained EfficientNetB0 backbone, fine-tuned from V3 |
+| Active model path | `models_v4/car_cnn_model_v4.keras` |
 | Input shape | 256 × 256 × 3 |
 | Output | One sigmoid score; class 0 = real, class 1 = AI-generated |
-| Decision threshold | 0.47 |
-| Model file size | 34,365,981 bytes |
-| SHA-256 | `ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5` |
+| Decision threshold | 0.50 |
+| Model file size | 34,358,590 bytes |
+| SHA-256 | `36b6e3fe95278cb73923ec01e109671278fe97877e5bb7beae4b947fcd3f6d3e` |
 
-The inference loader checks this SHA-256 before loading the saved model. If the weights are replaced or corrupted, the application stops with a checksum error rather than silently loading a different model.
+V3 rollback backup: `models_v3/car_cnn_model_v3.keras`; SHA-256 `ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5`. The inference loader checks the active model SHA-256 before loading. If the weights are replaced or corrupted, the application stops with a checksum error rather than silently loading a different model.
+
+To verify the active model locally (with the project environment activated), run:
+
+```bash
+python scripts/verify_active_cnn.py
+```
+
+To perform a prediction smoke test on a real photograph:
+
+```bash
+python scripts/verify_active_cnn.py /path/to/car_photo.jpg
+```

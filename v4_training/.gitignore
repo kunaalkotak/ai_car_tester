@@ -1,0 +1,13 @@
+# Raw AI candidate images must remain local; keep manifests and audit metadata tracked.
+ai_candidates/GPT/
+ai_candidates/GEMINI/
+ai_candidates/META/
+ai_candidates/contact_sheet.jpg
+
+# Local prepared dataset and model outputs if this folder is inside the project.
+data_v4/
+outputs_v4/
+*.keras
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

@@ -1,0 +1,22 @@
+{
+  "python_scripts_syntax": "PASS",
+  "notebook_json_validation": "PASS",
+  "candidate_count": 54,
+  "candidate_counts_by_generator": {
+    "GPT": 26,
+    "GEMINI": 19,
+    "META": 9
+  },
+  "split_counts": {
+    "train": 37,
+    "validation": 8,
+    "test": 9
+  },
+  "model_hash_expected_from_v3_config": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+  "v3_model_included": false,
+  "dataset_v2_included": false,
+  "notes": [
+    "Training starter only; no original real-image data or model weights bundled.",
+    "V3 model stays in the existing Listing Lens project folder."
+  ]
+}

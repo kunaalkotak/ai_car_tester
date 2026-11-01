@@ -57,8 +57,8 @@ def load_model(model_path: str | Path = MODEL_PATH):
     path = Path(model_path)
     if not path.is_file():
         raise FileNotFoundError(
-            f"CNN model not found: {path}. Keep the model at "
-            "models_v3/car_cnn_model_v3.keras."
+            f"CNN model not found: {path}. Check the model_file entry in "
+            "config/cnn_inference_config.json."
         )
 
     if EXPECTED_HASH:
@@ -173,7 +173,7 @@ def predict(model, image_batch: np.ndarray, threshold: float = AI_THRESHOLD) -> 
 
     ai_score = float(np.clip(raw_output[0], 0.0, 1.0))
     # Model predictions are float32. Compare the threshold at the same precision
-    # so an output represented as float32(0.47) is treated as exactly on-boundary.
+    # so an output represented at the configured threshold is treated consistently at the decision boundary.
     predicted_id = int(np.float32(ai_score) >= np.float32(threshold))
     return {
         "model": "CNN",

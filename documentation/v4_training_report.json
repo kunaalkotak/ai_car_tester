@@ -1,0 +1,235 @@
+{
+  "model": "Listing Lens V4 candidate, fine-tuned from EfficientNetB0 V3",
+  "v3_source_model": "models_v3/car_cnn_model_v3.keras",
+  "v3_source_sha256": "ea47dc1e9ded13944a2ac866ae968f3956a003d9faaf39ce4a0dfa8a8cad65b5",
+  "v3_source_hash_unchanged_check": true,
+  "v4_candidate_model": "models_v4/car_cnn_model_v4.keras",
+  "v4_candidate_sha256": "36b6e3fe95278cb73923ec01e109671278fe97877e5bb7beae4b947fcd3f6d3e",
+  "input": {
+    "shape": [
+      256,
+      256,
+      3
+    ],
+    "color": "RGB",
+    "range": "0..255 float32",
+    "resize": "bilinear direct resize",
+    "normalization": "kept inside saved EfficientNetB0 model; no external /255"
+  },
+  "training": {
+    "phase1_lr": 0.0001,
+    "phase1_max_epochs": 5,
+    "phase1_backbone": "frozen",
+    "phase2_lr": 1e-05,
+    "phase2_max_epochs": 12,
+    "phase2_backbone": "top 40 layers trainable except BatchNormalization",
+    "loss": "BinaryCrossentropy(label_smoothing=0.05)",
+    "optimizer": "Adam",
+    "batch_size": 8,
+    "class_weights": {
+      "0": 1.0423340961098397,
+      "1": 0.9609704641350211
+    },
+    "seed": 42
+  },
+  "dataset_file_counts": {
+    "train": {
+      "real": 437,
+      "ai_generated": 474
+    },
+    "validation": {
+      "real": 94,
+      "ai_generated": 102
+    },
+    "test": {
+      "real": 94,
+      "ai_generated": 103
+    }
+  },
+  "dataset_loaded_counts": {
+    "train": {
+      "real": 437,
+      "ai_generated": 474
+    },
+    "validation": {
+      "real": 94,
+      "ai_generated": 102
+    },
+    "test": {
+      "real": 94,
+      "ai_generated": 103
+    }
+  },
+  "selected_threshold_from_validation_balanced_accuracy": 0.5000000000000002,
+  "validation_metrics_at_selected_threshold": {
+    "threshold": 0.5000000000000002,
+    "accuracy": 0.9540816326530612,
+    "balanced_accuracy": 0.954630788485607,
+    "ai_precision": 0.9696969696969697,
+    "ai_recall": 0.9411764705882353,
+    "ai_f1": 0.9552238805970149,
+    "roc_auc": 0.9936378806841886,
+    "confusion_matrix_actual_rows_predicted_columns": [
+      [
+        91,
+        3
+      ],
+      [
+        6,
+        96
+      ]
+    ]
+  },
+  "test_metrics_at_selected_threshold": {
+    "threshold": 0.5000000000000002,
+    "accuracy": 0.9390862944162437,
+    "balanced_accuracy": 0.9384941127866143,
+    "ai_precision": 0.9333333333333333,
+    "ai_recall": 0.9514563106796117,
+    "ai_f1": 0.9423076923076923,
+    "roc_auc": 0.9889485643462095,
+    "confusion_matrix_actual_rows_predicted_columns": [
+      [
+        87,
+        7
+      ],
+      [
+        5,
+        98
+      ]
+    ]
+  },
+  "v3_baseline_on_same_v4_validation_and_test_splits": {
+    "validation_selected_threshold": 0.4000000000000002,
+    "validation_metrics_at_selected_threshold": {
+      "threshold": 0.4000000000000002,
+      "accuracy": 0.9540816326530612,
+      "balanced_accuracy": 0.9558823529411764,
+      "ai_precision": 1.0,
+      "ai_recall": 0.9117647058823529,
+      "ai_f1": 0.9538461538461539,
+      "roc_auc": 0.9842511472674176,
+      "confusion_matrix_actual_rows_predicted_columns": [
+        [
+          94,
+          0
+        ],
+        [
+          9,
+          93
+        ]
+      ]
+    },
+    "test_metrics_at_selected_threshold": {
+      "threshold": 0.4000000000000002,
+      "accuracy": 0.934010152284264,
+      "balanced_accuracy": 0.9350340838669697,
+      "ai_precision": 0.9591836734693877,
+      "ai_recall": 0.912621359223301,
+      "ai_f1": 0.9353233830845771,
+      "roc_auc": 0.9797562487089444,
+      "confusion_matrix_actual_rows_predicted_columns": [
+        [
+          90,
+          4
+        ],
+        [
+          9,
+          94
+        ]
+      ]
+    },
+    "original_configured_threshold": 0.47,
+    "validation_metrics_at_original_threshold": {
+      "threshold": 0.47,
+      "accuracy": 0.9438775510204082,
+      "balanced_accuracy": 0.946078431372549,
+      "ai_precision": 1.0,
+      "ai_recall": 0.8921568627450981,
+      "ai_f1": 0.9430051813471503,
+      "roc_auc": 0.9842511472674176,
+      "confusion_matrix_actual_rows_predicted_columns": [
+        [
+          94,
+          0
+        ],
+        [
+          11,
+          91
+        ]
+      ]
+    },
+    "test_metrics_at_original_threshold": {
+      "threshold": 0.47,
+      "accuracy": 0.9137055837563451,
+      "balanced_accuracy": 0.9156166081388143,
+      "ai_precision": 0.9574468085106383,
+      "ai_recall": 0.8737864077669902,
+      "ai_f1": 0.9137055837563451,
+      "roc_auc": 0.9797562487089444,
+      "confusion_matrix_actual_rows_predicted_columns": [
+        [
+          90,
+          4
+        ],
+        [
+          13,
+          90
+        ]
+      ]
+    }
+  },
+  "new_generator_challenge_test": {
+    "gemini": {
+      "n": 3,
+      "ai_detected": 3,
+      "ai_detection_rate": 1.0,
+      "mean_ai_score": 0.80411297082901,
+      "files": [
+        "gemini_gemini_004.jpg",
+        "gemini_gemini_009.png",
+        "gemini_gemini_010.png"
+      ],
+      "interpretation": "small exploratory AI-only holdout; not a robust estimate"
+    },
+    "gpt": {
+      "n": 4,
+      "ai_detected": 4,
+      "ai_detection_rate": 1.0,
+      "mean_ai_score": 0.7595508694648743,
+      "files": [
+        "gpt_gpt_008.png",
+        "gpt_gpt_012.png",
+        "gpt_gpt_019.png",
+        "gpt_gpt_024.png"
+      ],
+      "interpretation": "small exploratory AI-only holdout; not a robust estimate"
+    },
+    "meta": {
+      "n": 2,
+      "ai_detected": 2,
+      "ai_detection_rate": 1.0,
+      "mean_ai_score": 0.9963498115539551,
+      "files": [
+        "meta_meta_007.jpg",
+        "meta_meta_009.jpg"
+      ],
+      "interpretation": "small exploratory AI-only holdout; not a robust estimate"
+    }
+  },
+  "caveats": [
+    "V3 and V4 test operating-point metrics use thresholds independently selected on the same V4 validation split; ROC-AUC is threshold-independent. The original V3 0.47 operating-point metrics are retained for reference.",
+    "The new-generator AI-only subset in this V4 test split contains 9 images total (GPT 4, Gemini 3, Meta AI 2); it is too small for strong per-generator claims.",
+    "The user-provided GPT/GEMINI/META folder labels are recorded source labels and were not independently authenticated.",
+    "V3 and V4 were compared on the same V4 validation and test splits. V4 is the active application model in this package; the V3 checkpoint is preserved unchanged as a rollback backup.",
+    "All three named generator families were represented in the V4 training/development pool. This evaluation does not establish generalisation to completely unseen generator families."
+  ],
+  "deployment": {
+    "application_display_name": "CNN",
+    "active_model_path": "models_v4/car_cnn_model_v4.keras",
+    "active_threshold": 0.5,
+    "v3_preserved_as_backup": true,
+    "v3_backup_path": "models_v3/car_cnn_model_v3.keras",
+    "promotion_note": "V4 is the active application candidate following review of the completed full-dataset training report. V3 weights remain unchanged as a rollback backup."
+  }
+}

@@ -344,7 +344,7 @@ def render_app() -> None:
 
             **What it does not check:** It does not verify the listing, seller identity, vehicle ownership, registration, mileage, condition, availability, photo date, or whether the image was copied from another advertisement. A real-looking image can still be used in a misleading listing, and a genuine car can appear in an AI-looking or heavily edited image.
 
-            **How to read the score:** CNN uses a decision threshold of 0.47. The displayed score is an uncalibrated model output, not the probability that the listing is fake.
+            **How to read the score:** CNN uses a decision threshold of 0.50. The displayed score is an uncalibrated model output, not the probability that the listing is fake.
 
             **Privacy:** The application processes the uploaded image for inference and keeps it in the active Streamlit session to display the result. This project code does not intentionally save uploaded images to the project directory. Do not upload personal documents or sensitive information.
             """
